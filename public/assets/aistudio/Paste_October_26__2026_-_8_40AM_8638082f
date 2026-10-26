@@ -1,0 +1,930 @@
+# PROMPT MAÎTRE — DÉVELOPPEMENT D'UN SAAS COMPLET DE GESTION DU PERSONNEL, AVEC ABONNEMENTS, MOBILE MONEY ET SUPER-ADMINISTRATION
+
+## 1. RÔLE ET MISSION
+
+Tu es un architecte logiciel senior, développeur full-stack, spécialiste SaaS multi-tenant, cybersécurité, paiements Mobile Money en Afrique et expérience utilisateur.
+
+Ta mission est de concevoir, développer, tester et livrer une application SaaS professionnelle, fonctionnelle et commercialisable, destinée principalement aux entreprises d'Afrique francophone.
+
+Le produit doit permettre aux entreprises de gérer leurs employés, présences, retards, pauses, absences et rapports, tout en permettant au propriétaire du SaaS de gérer l'ensemble de son activité commerciale depuis un espace d'administration privé.
+
+**Ne produis pas uniquement une maquette.** Toutes les fonctionnalités essentielles doivent être reliées à une base de données, à une authentification réelle et à des services backend fonctionnels.
+
+Ne simule jamais un paiement réussi, un abonnement actif, une synchronisation ou un revenu réel.
+
+Si une intégration nécessite des identifiants ou des accès externes que je ne possède pas encore, prépare l'intégration complète, indique précisément les éléments manquants et fournis un mode de test clairement identifié.
+
+## 2. OBJECTIFS DU PRODUIT
+
+Créer un SaaS comprenant :
+
+1. Une application de gestion du personnel et des présences.
+2. Un système d'inscription et de connexion sécurisé.
+3. Un essai gratuit de 3 jours par entreprise.
+4. Des abonnements payants avec renouvellement et gestion des échéances.
+5. Des paiements Mobile Money via SasPay.
+6. Un espace client permettant de gérer son entreprise.
+7. Un chat Aide permettant aux clients de signaler leurs problèmes.
+8. Un tableau de bord super-administrateur réservé au propriétaire du SaaS.
+9. Un système de tickets permettant de répondre aux clients et de résoudre leurs problèmes.
+10. Un tableau de bord financier permettant de suivre les revenus, les paiements, les abonnements et les clients.
+11. Un système de notifications, de journaux d'activité et de surveillance des erreurs.
+12. Une architecture évolutive permettant d'ajouter ultérieurement d'autres fonctionnalités.
+
+Le produit doit être adapté aux téléphones, tablettes et ordinateurs. Privilégier une application web responsive et installable comme PWA si cela convient à la stack retenue.
+
+## 3. ARCHITECTURE TECHNIQUE
+
+Étudie le projet existant avant de choisir ou de modifier la stack.
+
+Si le projet est neuf, privilégie :
+
+- Frontend : Next.js avec TypeScript.
+- Interface : Tailwind CSS et une bibliothèque de composants accessible et maintenue.
+- Backend : API sécurisée côté serveur, avec validation systématique des entrées.
+- Base de données : PostgreSQL.
+- Authentification : système fiable avec sessions sécurisées.
+- Hébergement des fichiers : stockage privé avec URLs temporaires lorsque nécessaire.
+- Déploiement : plateforme compatible avec les technologies choisies.
+- Versionnement : Git, migrations de base de données et fichier d'exemple des variables d'environnement.
+
+Supabase peut être utilisé pour PostgreSQL, l'authentification, les politiques de sécurité et les fonctions serveur si cette solution est retenue.
+
+L'application doit séparer strictement le frontend, la logique métier, les accès aux données et les intégrations externes.
+
+Avant toute modification, inspecte les fichiers du projet et conserve les éléments existants qui sont corrects. Ne détruis pas le projet pour repartir de zéro sans justification.
+
+## 4. COMPTES, INSCRIPTION ET AUTHENTIFICATION
+
+Créer les pages suivantes :
+
+- Page d'accueil commerciale.
+- Page de présentation des fonctionnalités.
+- Page des tarifs.
+- Inscription.
+- Connexion.
+- Mot de passe oublié.
+- Réinitialisation du mot de passe.
+- Vérification de l'adresse e-mail si nécessaire.
+- Acceptation des conditions d'utilisation et de la politique de confidentialité.
+- Tableau de bord client.
+- Tableau de bord super-administrateur.
+
+À l'inscription, demander au minimum :
+
+- Nom du responsable.
+- Nom de l'entreprise.
+- Adresse e-mail.
+- Numéro de téléphone avec indicatif du pays.
+- Pays.
+- Mot de passe.
+- Acceptation des conditions.
+
+Chaque entreprise possède un espace de travail indépendant.
+
+Prévoir plusieurs utilisateurs par entreprise avec des rôles distincts :
+
+- Propriétaire de l'entreprise.
+- Administrateur.
+- Responsable du personnel.
+- Utilisateur avec accès limité.
+
+Un utilisateur ne doit accéder qu'aux données autorisées par son rôle.
+
+## 5. ESSAI GRATUIT DE 3 JOURS
+
+Mettre en place un véritable système d'essai gratuit.
+
+Règles obligatoires :
+
+1. Lorsqu'une entreprise crée son compte, son essai gratuit commence à la date et à l'heure définies par le serveur.
+2. La durée est de 72 heures exactement à compter du début de l'essai.
+3. Le système enregistre `trial_started_at` et `trial_ends_at`.
+4. Le compte dispose des fonctionnalités prévues par l'offre d'essai pendant cette période.
+5. Afficher un compteur du temps restant dans l'espace client.
+6. Envoyer une notification avant l'expiration, si le canal est disponible.
+7. À l'expiration, l'entreprise passe à l'état `expired` si aucun abonnement payant valide n'a été activé.
+8. Après expiration, les fonctionnalités protégées passent en lecture seule ou sont bloquées selon une politique clairement définie.
+9. Les données du client ne sont pas supprimées à l'expiration.
+10. L'utilisateur peut payer et retrouver son accès après confirmation du paiement.
+11. L'expiration doit être contrôlée côté serveur, et non uniquement dans l'interface.
+12. Un simple changement de date sur le téléphone ne doit pas prolonger l'essai.
+13. Un client ne doit pas pouvoir réinitialiser son essai en supprimant simplement les cookies ou en créant un nouveau compte avec la même adresse e-mail.
+14. Prévoir une protection raisonnable contre les essais multiples abusifs, sans bloquer arbitrairement les clients légitimes.
+15. Le super-administrateur peut consulter les essais et, exceptionnellement, accorder une extension manuelle avec justification et journalisation.
+
+États possibles d'un abonnement :
+
+- `trialing`
+- `active`
+- `past_due`
+- `expired`
+- `cancelled`
+- `suspended`
+
+Gérer séparément l'état du compte, l'état de l'abonnement et les droits d'accès.
+
+## 6. OFFRES ET ABONNEMENTS
+
+Créer une page de tarification avec plusieurs offres configurables.
+
+Exemple initial à valider commercialement :
+
+- Essai gratuit : 3 jours.
+- Starter : 5 000 FCFA/mois.
+- Business : 10 000 FCFA/mois.
+- Premium : 25 000 FCFA/mois.
+
+Ces tarifs sont des propositions modifiables et ne doivent pas être considérés comme définitifs.
+
+Le super-administrateur doit pouvoir configurer :
+
+- Le nom de chaque offre.
+- Son prix.
+- Sa devise.
+- Sa durée.
+- Le nombre maximal d'employés.
+- Le nombre d'utilisateurs.
+- Les fonctionnalités incluses.
+- Les limites de stockage ou d'export si elles existent.
+- Son statut actif ou inactif.
+- Les éventuelles promotions.
+
+Prévoir les abonnements mensuels et annuels si l'intégration le permet.
+
+Le client doit pouvoir :
+
+- Consulter son offre.
+- Voir la date de fin de son abonnement.
+- Changer d'offre.
+- Renouveler son abonnement.
+- Consulter son historique de facturation.
+- Télécharger ses justificatifs de paiement.
+- Demander l'annulation du renouvellement.
+- Voir les conséquences d'une expiration.
+
+Ne jamais activer un abonnement payant sur la seule base d'une redirection du navigateur ou d'un message affiché par le fournisseur de paiement.
+
+## 7. INTÉGRATION DE SASPAY ET MOBILE MONEY
+
+Intégrer SasPay comme fournisseur de paiement principal.
+
+Avant de développer l'intégration :
+
+1. Identifier le fournisseur SasPay exact et obtenir sa documentation officielle.
+2. Vérifier les pays pris en charge, les opérateurs Mobile Money disponibles, les devises, les frais, les méthodes d'authentification et les mécanismes de confirmation.
+3. Vérifier les environnements de test et de production.
+4. Identifier les endpoints officiels, les champs obligatoires, le format des réponses, les statuts de paiement et les exigences des webhooks.
+5. Ne jamais inventer un endpoint, un format de signature ou une méthode d'authentification.
+
+Créer une couche d'intégration isolée, par exemple `SasPayPaymentProvider`, afin de pouvoir faire évoluer ou remplacer le fournisseur ultérieurement.
+
+### Parcours de paiement
+
+1. Le client choisit son abonnement.
+2. Il choisit son pays, sa devise et le moyen de paiement disponible.
+3. Il saisit son numéro de téléphone si nécessaire.
+4. Le serveur crée une commande de paiement avec un identifiant unique.
+5. Le serveur demande l'initialisation du paiement à SasPay.
+6. L'application affiche les instructions de paiement fournies par SasPay.
+7. Le client effectue la transaction sur son téléphone selon le parcours officiel du fournisseur.
+8. Le serveur reçoit une notification fiable du statut du paiement ou vérifie ce statut auprès de SasPay.
+9. Le serveur vérifie l'authenticité de la notification conformément à la documentation officielle.
+10. Après confirmation du paiement, le serveur active ou prolonge l'abonnement.
+11. Le client reçoit une confirmation et un justificatif.
+12. Le paiement apparaît dans le tableau de bord du super-administrateur.
+
+### Sécurité des paiements
+
+- Conserver les clés API exclusivement dans les variables d'environnement du serveur.
+- Ne jamais exposer les clés secrètes dans le navigateur ou dans le dépôt Git.
+- Vérifier les signatures des webhooks lorsque le fournisseur le prévoit.
+- Utiliser une clé d'idempotence ou un mécanisme équivalent pour éviter les doubles traitements.
+- Enregistrer les identifiants des transactions et les références du fournisseur.
+- Vérifier le montant, la devise, le bénéficiaire et le statut avant d'activer un abonnement.
+- Refuser les notifications non authentifiées.
+- Empêcher qu'un même paiement prolonge deux fois un abonnement.
+- Traiter correctement les paiements en attente, réussis, échoués, expirés, annulés et remboursés.
+- Prévoir un mécanisme de rapprochement des paiements.
+- Ne jamais stocker de code PIN Mobile Money ou de secret de paiement du client.
+- Journaliser les événements sans enregistrer de données sensibles inutiles.
+
+Si SasPay ne prend pas en charge une devise ou un pays, ne pas prétendre le contraire. Afficher uniquement les options effectivement disponibles.
+
+Fournir un mode sandbox permettant de tester les parcours sans argent réel. Identifier clairement toutes les transactions simulées.
+
+### Gestion des incidents de paiement
+
+Si le client est débité mais que l'abonnement n'est pas activé :
+
+- Enregistrer le problème.
+- Permettre de vérifier la transaction auprès de SasPay.
+- Ne pas demander automatiquement un second paiement.
+- Afficher un état explicite au client.
+- Permettre au support de retrouver la transaction.
+- Permettre une correction administrative contrôlée et journalisée.
+
+## 8. FONCTIONNALITÉS DE GESTION DU PERSONNEL
+
+Créer un module complet pour les entreprises abonnées.
+
+### Gestion des employés
+
+- Ajouter un employé.
+- Modifier ses informations.
+- Archiver ou désactiver un employé.
+- Supprimer un employé selon une politique de conservation appropriée.
+- Rechercher, filtrer et trier les employés.
+- Enregistrer le matricule, le nom, le prénom, le téléphone, le poste, le service et la date d'embauche.
+- Importer des employés depuis un fichier CSV.
+- Exporter les listes autorisées.
+- Consulter l'historique d'un employé.
+
+### Présences et retards
+
+- Enregistrer l'arrivée d'un employé.
+- Comparer l'heure d'arrivée à l'horaire de référence.
+- Calculer les minutes de retard.
+- Gérer les horaires par employé, équipe ou journée.
+- Enregistrer les départs si cette fonctionnalité est activée.
+- Gérer les absences, congés et jours fériés.
+- Éviter les doublons d'événements de présence.
+- Enregistrer la source de chaque opération : saisie normale, correction manuelle, import ou synchronisation.
+
+### Pauses
+
+- Démarrer une pause.
+- Terminer une pause.
+- Calculer la durée de chaque pause.
+- Gérer plusieurs pauses par journée si la politique de l'entreprise le permet.
+- Empêcher qu'un employé démarre plusieurs pauses simultanément.
+- Empêcher une fin de pause sans pause active.
+- Conserver un historique fiable des événements.
+- Permettre la correction manuelle autorisée d'une pause oubliée.
+
+Les boutons doivent refléter l'état réel du serveur et de la base de données. Un clic ne doit pas entraîner une activation suivie d'une désactivation inexpliquée.
+
+### Corrections manuelles
+
+Les responsables autorisés doivent pouvoir enregistrer ou corriger :
+
+- L'heure d'arrivée.
+- Le début et la fin des pauses.
+- Les absences.
+- Les autres événements prévus par la politique de présence.
+
+Chaque correction doit enregistrer l'auteur, l'ancienne valeur, la nouvelle valeur, la date et le motif.
+
+### Tableau de bord de l'entreprise
+
+Afficher en temps réel ou après actualisation :
+
+- Présents.
+- En retard.
+- En pause.
+- Absents.
+- Historique du jour.
+- Temps de retard cumulé.
+- Derniers événements.
+- Alertes d'anomalies.
+
+Les indicateurs doivent provenir de requêtes fiables en base de données et respecter le fuseau horaire de l'entreprise.
+
+### Rapports
+
+- Rapport journalier.
+- Rapport hebdomadaire.
+- Rapport mensuel.
+- Rapport individuel.
+- Rapport des retards.
+- Rapport des absences.
+- Rapport des pauses.
+- Export PDF.
+- Export CSV ou Excel si prévu.
+
+Prévoir les filtres par employé, service et période.
+
+Les documents générés doivent présenter le nom de l'entreprise, la période, les données pertinentes et la date de génération.
+
+### Mode hors ligne
+
+Si la PWA ou l'application mobile le permet :
+
+- Enregistrer localement les événements non synchronisés.
+- Leur attribuer un identifiant unique.
+- Synchroniser dès que la connexion revient.
+- Éviter les doublons.
+- Signaler les conflits et les erreurs de synchronisation.
+- Afficher le statut : synchronisé, en attente ou en erreur.
+
+Les données hors ligne doivent être protégées autant que possible. Ne jamais annoncer une synchronisation réussie tant que le serveur n'a pas confirmé la réception.
+
+## 9. ESPACE CLIENT
+
+Créer une interface moderne, simple et responsive.
+
+### Menu principal
+
+- Accueil.
+- Employés.
+- Présences.
+- Pauses.
+- Rapports.
+- Abonnement.
+- Notifications.
+- Chat Aide.
+- Paramètres.
+- Déconnexion.
+
+### Profil et paramètres
+
+Permettre de gérer :
+
+- Les informations de l'entreprise.
+- Le logo.
+- Le fuseau horaire.
+- Les horaires de référence.
+- Les jours travaillés.
+- Les règles de retard.
+- Les préférences de notification.
+- Les utilisateurs et leurs permissions.
+- Le mot de passe et la sécurité du compte.
+
+### Centre d'aide
+
+Créer un accès visible au chat Aide depuis toutes les pages de l'application.
+
+L'utilisateur doit pouvoir :
+
+- Ouvrir une conversation avec le support.
+- Expliquer son problème.
+- Joindre une capture d'écran ou un fichier autorisé.
+- Choisir une catégorie.
+- Indiquer la gravité.
+- Consulter les réponses.
+- Recevoir des notifications.
+- Répondre dans la conversation.
+- Voir le statut de son ticket.
+- Confirmer qu'un problème est résolu.
+- Rouvrir un ticket si le problème persiste.
+
+Catégories proposées :
+
+- Problème technique.
+- Paiement.
+- Abonnement.
+- Connexion au compte.
+- Synchronisation.
+- Gestion du personnel.
+- Demande de fonctionnalité.
+- Autre.
+
+Statuts :
+
+- Nouveau.
+- Ouvert.
+- En cours.
+- En attente du client.
+- Résolu.
+- Fermé.
+
+Ne pas afficher publiquement les tickets d'autres clients.
+
+## 10. TABLEAU DE BORD SUPER-ADMINISTRATEUR
+
+Créer un espace indépendant, par exemple `/admin`, exclusivement réservé au propriétaire autorisé du SaaS.
+
+L'accès doit être protégé côté serveur par un rôle administratif explicite. Masquer un lien dans l'interface ne constitue pas une protection.
+
+Le premier compte super-administrateur doit être créé par une procédure sécurisée, avec des identifiants définis par le propriétaire. Ne pas coder de mot de passe secret universel dans le projet.
+
+### A. Vue d'ensemble
+
+Afficher :
+
+- Nombre total de clients inscrits.
+- Nombre de clients actifs.
+- Nombre d'essais gratuits en cours.
+- Nombre d'essais expirés.
+- Nombre d'abonnements payants actifs.
+- Nombre d'abonnements en retard de paiement.
+- Nombre de clients suspendus.
+- Nouveaux clients sur la période.
+- Nombre de tickets ouverts.
+- Nombre de tickets urgents.
+- Évolution des revenus.
+- Derniers paiements.
+- Dernières inscriptions.
+- Alertes système.
+
+Ajouter des filtres par période, pays, devise, offre et statut.
+
+### B. Revenus et finances
+
+Créer une page financière permettant de consulter :
+
+- Chiffre d'affaires encaissé.
+- Revenus par jour, semaine, mois et année.
+- Revenus par abonnement.
+- Revenus par pays.
+- Revenus par devise.
+- Nombre de transactions réussies.
+- Paiements échoués.
+- Paiements en attente.
+- Remboursements.
+- Frais du fournisseur lorsqu'ils sont connus.
+- Revenu net estimé après frais connus.
+- Évolution du revenu récurrent mensuel.
+- Historique des transactions.
+
+Distinguer impérativement :
+
+1. L'argent effectivement encaissé.
+2. Les paiements en attente.
+3. Les remboursements.
+4. Les revenus récurrents théoriques.
+5. Les montants facturés mais non encaissés.
+6. Les frais et coûts lorsqu'ils sont disponibles.
+
+Ne jamais confondre le revenu prévisionnel avec l'argent réellement reçu.
+
+Pour plusieurs devises, conserver le montant et la devise d'origine. Si une conversion est affichée, indiquer le taux, sa source et la date. Ne pas additionner directement des montants de devises différentes.
+
+Permettre l'export CSV des données financières autorisées.
+
+### C. Gestion des clients
+
+Créer une liste de tous les clients avec :
+
+- Nom de l'entreprise.
+- Responsable.
+- E-mail.
+- Téléphone.
+- Pays.
+- Date d'inscription.
+- Offre actuelle.
+- Statut de l'essai ou de l'abonnement.
+- Date de fin de l'essai.
+- Date d'expiration de l'abonnement.
+- Total payé.
+- Dernier paiement.
+- Nombre de tickets ouverts.
+- Dernière activité.
+
+Ajouter recherche, filtres, tri et pagination.
+
+En ouvrant une fiche client, le super-administrateur doit pouvoir consulter les informations nécessaires à la gestion du compte, les abonnements, les paiements, les tickets et les journaux d'événements.
+
+Prévoir des actions contrôlées :
+
+- Modifier les données commerciales autorisées.
+- Suspendre ou réactiver un compte.
+- Accorder une extension d'essai.
+- Modifier exceptionnellement un abonnement.
+- Consulter une transaction.
+- Envoyer une notification.
+- Consulter les tickets.
+- Ajouter une note interne.
+- Exporter les données autorisées.
+
+Chaque action administrative sensible doit être journalisée avec l'identité de l'administrateur, la date et le motif.
+
+### D. Gestion des abonnements
+
+Créer une page listant tous les abonnements avec :
+
+- Client.
+- Offre.
+- Montant.
+- Devise.
+- Date de début.
+- Date de fin.
+- Statut.
+- Mode de paiement.
+- Dernière transaction.
+- Prochaine échéance si applicable.
+
+Permettre de filtrer, consulter et traiter les anomalies.
+
+Une activation manuelle doit nécessiter une autorisation explicite, un motif et une trace d'audit. Elle ne doit jamais être présentée comme un paiement encaissé.
+
+### E. Gestion des paiements
+
+Créer un tableau des transactions avec :
+
+- Référence interne.
+- Référence SasPay.
+- Client.
+- Montant.
+- Devise.
+- Moyen de paiement.
+- Date de création.
+- Date de confirmation.
+- Statut.
+- Frais connus.
+- Motif d'échec lorsqu'il est fourni.
+
+Prévoir un accès au détail et aux événements de la transaction.
+
+Ne jamais permettre de modifier librement le montant historique d'un paiement confirmé. Les corrections doivent créer des écritures ou événements d'ajustement traçables.
+
+## 11. BOÎTE DE RÉCEPTION DU SUPPORT ET CHAT AIDE
+
+Le support est une fonctionnalité prioritaire.
+
+Créer dans le tableau de bord super-administrateur une page « Support clients ».
+
+### Interface de support
+
+Présenter une interface en trois zones :
+
+1. Liste des tickets et conversations.
+2. Conversation sélectionnée.
+3. Fiche du client et informations contextuelles.
+
+La liste doit afficher :
+
+- Nom du client.
+- Entreprise.
+- Sujet.
+- Catégorie.
+- Priorité.
+- Statut.
+- Date du dernier message.
+- Nombre de messages non lus.
+- Agent ou administrateur assigné si nécessaire.
+
+Ajouter les filtres :
+
+- Tous les tickets.
+- Nouveaux.
+- Non lus.
+- Ouverts.
+- Urgents.
+- En cours.
+- En attente du client.
+- Résolus.
+- Fermés.
+
+### Actions du support
+
+Le super-administrateur doit pouvoir :
+
+- Lire les messages d'un ticket.
+- Répondre au client.
+- Envoyer une pièce jointe autorisée.
+- Changer le statut.
+- Définir la priorité.
+- Assigner le ticket.
+- Ajouter une note interne invisible au client.
+- Consulter l'historique.
+- Marquer comme résolu.
+- Fermer le ticket.
+- Rouvrir un ticket.
+- Rechercher dans les conversations.
+- Accéder à la fiche client.
+- Consulter les incidents de paiement liés au ticket.
+- Voir les erreurs techniques associées lorsqu'elles sont disponibles et pertinentes.
+
+Le client doit recevoir la réponse dans son propre espace et, si les notifications sont configurées, par e-mail ou notification.
+
+Les notes internes ne doivent jamais être visibles dans le compte client.
+
+### Suivi de résolution
+
+Chaque ticket doit enregistrer :
+
+- Son créateur.
+- Sa date de création.
+- Les messages.
+- Son statut actuel.
+- Son historique de statuts.
+- Sa priorité.
+- Son responsable.
+- Sa date de résolution.
+- Les éventuelles pièces jointes.
+- Les notes internes.
+
+Prévoir des indicateurs de temps de première réponse et de résolution.
+
+Ne pas marquer automatiquement un ticket comme résolu simplement parce qu'un administrateur a répondu.
+
+### Sécurité du chat
+
+- Vérifier les autorisations pour chaque conversation.
+- Empêcher un client d'accéder aux tickets d'une autre entreprise.
+- Valider les types et tailles de fichiers.
+- Stocker les pièces jointes dans un espace privé.
+- Protéger contre les scripts malveillants et les injections.
+- Limiter le spam et les envois répétitifs.
+- Ne pas exposer les clés API, mots de passe ou données sensibles dans les messages ou les journaux.
+
+## 12. SURVEILLANCE DES ERREURS ET RÉSOLUTION DES INCIDENTS
+
+Je veux pouvoir comprendre les problèmes que rencontrent mes clients et les résoudre depuis mon espace d'administration, sans devoir accéder directement à leur téléphone.
+
+Mettre en place :
+
+- Journaux d'erreurs backend.
+- Historique des échecs de synchronisation.
+- Historique des webhooks de paiement.
+- Suivi des erreurs d'authentification sans stocker les mots de passe.
+- Suivi des erreurs de génération de PDF.
+- Suivi des erreurs d'importation.
+- Statut des services externes.
+- Identifiants de corrélation pour relier une erreur à une requête.
+- Alertes pour les incidents critiques.
+- Un outil de consultation des événements techniques autorisés depuis la fiche client.
+
+Créer une page « Incidents techniques » avec filtres par date, gravité, type, client et statut.
+
+Pour chaque incident, afficher :
+
+- Description.
+- Date.
+- Gravité.
+- Composant concerné.
+- Message d'erreur expurgé des secrets.
+- Actions tentées.
+- Statut de résolution.
+- Notes administratives.
+
+Prévoir des actions de réparation contrôlées lorsque cela est sûr, par exemple :
+
+- Relancer une synchronisation.
+- Réessayer une génération de rapport.
+- Relancer une vérification de paiement.
+- Rejouer un événement idempotent lorsque la conception le permet.
+- Réinitialiser un état bloqué après vérification.
+
+Ne jamais permettre de rejouer aveuglément une opération financière susceptible de débiter le client une seconde fois.
+
+Toute action de réparation doit produire une trace d'audit.
+
+Si le problème nécessite une intervention sur le téléphone, afficher clairement les étapes à suivre au client au lieu de prétendre que le problème a été réparé à distance.
+
+## 13. NOTIFICATIONS
+
+Créer un centre de notifications pour les clients et pour l'administrateur.
+
+Événements possibles :
+
+- Fin prochaine de l'essai.
+- Essai expiré.
+- Paiement confirmé.
+- Paiement échoué.
+- Abonnement proche de l'expiration.
+- Abonnement expiré.
+- Nouvelle réponse du support.
+- Ticket résolu.
+- Incident critique.
+- Nouvelle inscription.
+- Paiement reçu.
+
+Prévoir l'e-mail et les notifications dans l'application. Les SMS ou notifications WhatsApp peuvent être ajoutés si un fournisseur adapté est configuré.
+
+Gérer les préférences, les erreurs d'envoi et les tentatives de livraison.
+
+## 14. SÉCURITÉ ET ISOLATION DES DONNÉES
+
+La sécurité doit être intégrée dès le début.
+
+Exigences obligatoires :
+
+- Isolation stricte des données par entreprise.
+- Vérification des permissions côté serveur.
+- Politiques RLS si Supabase est utilisé.
+- Authentification sécurisée.
+- Limitation des tentatives de connexion.
+- Validation des données reçues par les API.
+- Protection contre les injections SQL, XSS et CSRF selon les mécanismes utilisés.
+- Gestion sécurisée des sessions.
+- Secrets exclusivement côté serveur.
+- Chiffrement des communications HTTPS en production.
+- Sauvegardes et procédure de restauration.
+- Journalisation des actions administratives.
+- Politique de conservation et suppression des données.
+- Contrôle d'accès aux fichiers.
+- Protection des informations personnelles.
+- Procédure de récupération de compte.
+
+Le super-administrateur peut accéder aux informations nécessaires au fonctionnement du service et au support. Il ne doit pas disposer d'un accès libre et invisible à toutes les données opérationnelles des entreprises.
+
+Si une fonction d'assistance nécessite de consulter des données métier, limiter l'accès au strict nécessaire et journaliser les consultations sensibles.
+
+Ne jamais inclure de données personnelles réelles dans les jeux de données de démonstration.
+
+## 15. INTERFACE ET EXPÉRIENCE UTILISATEUR
+
+Créer une interface moderne, professionnelle et rapide.
+
+Style visuel :
+
+- Design épuré.
+- Couleurs cohérentes.
+- Typographie lisible.
+- Cartes statistiques.
+- Graphiques financiers.
+- Tableaux avec recherche et filtres.
+- Menus simples.
+- Notifications visuelles.
+- États de chargement.
+- Messages d'erreur compréhensibles.
+- Pages vides avec instructions utiles.
+- Formulaires validés.
+- Navigation adaptée au mobile.
+
+Les tableaux de bord client et administrateur doivent avoir des identités visuelles cohérentes, mais des navigations et permissions distinctes.
+
+Prévoir les langues française et anglaise si possible, avec le français comme langue initiale.
+
+Prendre en compte les connexions Internet instables et les appareils Android courants.
+
+Ne pas créer de boutons décoratifs qui ne font rien. Chaque bouton doit avoir une action réelle ou être explicitement désactivé avec une explication.
+
+## 16. MODÈLE DE DONNÉES
+
+Concevoir des migrations et des relations adaptées. Prévoir au minimum les entités suivantes :
+
+- `users`
+- `organizations`
+- `organization_members`
+- `roles` ou permissions équivalentes
+- `employees`
+- `work_schedules`
+- `attendance_events`
+- `break_events`
+- `leave_requests` si la gestion des congés est activée
+- `reports`
+- `plans`
+- `subscriptions`
+- `trial_history`
+- `payment_orders`
+- `payment_transactions`
+- `payment_webhook_events`
+- `refunds` si les remboursements sont pris en charge
+- `support_tickets`
+- `support_messages`
+- `support_attachments`
+- `support_internal_notes`
+- `notifications`
+- `system_incidents`
+- `application_error_logs`
+- `audit_logs`
+- `admin_users` ou un système de rôles administratifs équivalent
+- `application_settings`
+
+Chaque table doit avoir des clés cohérentes, des contraintes d'intégrité et des index pertinents.
+
+Les données d'une entreprise doivent être rattachées à son identifiant et protégées par les règles d'autorisation appropriées.
+
+Utiliser des transactions de base de données pour les opérations métier qui doivent réussir ou échouer ensemble, notamment l'activation d'un abonnement après confirmation d'un paiement.
+
+## 17. QUALITÉ, TESTS ET LIVRAISON
+
+Ne considère pas le projet comme terminé avant d'avoir vérifié les parcours critiques.
+
+Créer :
+
+- Tests unitaires de la logique métier.
+- Tests d'intégration de la base de données.
+- Tests des permissions.
+- Tests de l'essai gratuit.
+- Tests des paiements en mode sandbox.
+- Tests des webhooks et de leur idempotence.
+- Tests du chat Aide.
+- Tests de l'isolation entre entreprises.
+- Tests des rapports PDF.
+- Tests de synchronisation hors ligne si activée.
+- Tests de non-régression.
+
+Tester notamment les scénarios suivants :
+
+1. Inscription d'une entreprise.
+2. Début de l'essai gratuit.
+3. Utilisation pendant l'essai.
+4. Expiration au bout de 72 heures.
+5. Paiement confirmé.
+6. Paiement échoué.
+7. Webhook reçu plusieurs fois.
+8. Paiement reçu sans activation immédiate de l'abonnement.
+9. Renouvellement d'un abonnement.
+10. Création d'un employé.
+11. Enregistrement d'une présence.
+12. Démarrage et fin d'une pause.
+13. Correction manuelle d'un horaire.
+14. Génération d'un rapport.
+15. Création d'un ticket client.
+16. Réponse du super-administrateur.
+17. Résolution d'un ticket.
+18. Tentative d'accès aux données d'une autre entreprise.
+19. Tentative d'accès non autorisé au tableau de bord administrateur.
+20. Gestion d'une panne temporaire de connexion.
+
+Fournir :
+
+- Le code source complet.
+- Un fichier README avec les instructions.
+- Un fichier `.env.example` sans secrets.
+- Les migrations de base de données.
+- Les scripts de lancement et de test.
+- Les instructions de configuration Supabase si utilisé.
+- Les instructions de configuration SasPay.
+- Les instructions de déploiement.
+- Une procédure de création du premier super-administrateur.
+- Une procédure de sauvegarde et de restauration.
+- Un guide de résolution des erreurs courantes.
+
+Ne jamais annoncer qu'un test a réussi s'il n'a pas réellement été exécuté.
+
+## 18. ORDRE DE DÉVELOPPEMENT
+
+Développer dans cet ordre :
+
+**Phase 1 — Fondations**
+- Architecture.
+- Base de données.
+- Authentification.
+- Organisations et permissions.
+- Interface de base.
+
+**Phase 2 — Produit principal**
+- Employés.
+- Présences.
+- Pauses.
+- Rapports.
+- Tableau de bord client.
+
+**Phase 3 — Monétisation**
+- Offres.
+- Essai de 72 heures.
+- Abonnements.
+- SasPay.
+- Webhooks.
+- Historique des transactions.
+
+**Phase 4 — Administration**
+- Super-administrateur.
+- Vue d'ensemble.
+- Finances.
+- Clients.
+- Abonnements.
+- Paiements.
+
+**Phase 5 — Support et surveillance**
+- Chat Aide.
+- Gestion des tickets.
+- Notes internes.
+- Journaux d'erreurs.
+- Incidents.
+- Actions de réparation contrôlées.
+
+**Phase 6 — Finalisation**
+- Sécurité.
+- Tests.
+- Responsive mobile.
+- Documentation.
+- Déploiement.
+- Vérification du parcours complet de bout en bout.
+
+Ne passe pas à la phase suivante en ignorant des erreurs critiques de la phase actuelle.
+
+## 19. RÈGLES DE TRAVAIL POUR L'AGENT IA
+
+- Commence par inspecter le projet existant.
+- Présente brièvement l'architecture retenue.
+- Identifie les prérequis réellement manquants.
+- Développe le produit par étapes cohérentes.
+- Fournis le contenu complet des fichiers créés ou modifiés.
+- Évite les solutions inutilement complexes.
+- N'invente pas de clés, de comptes, d'API ou de résultats de tests.
+- N'utilise pas de données fictives dans les indicateurs de production.
+- Sépare les données de démonstration des données réelles.
+- N'expose jamais les secrets dans le frontend.
+- Ne contourne jamais les vérifications de paiement.
+- Ne supprime pas les données existantes sans autorisation.
+- Signale clairement les fonctionnalités qui nécessitent encore une configuration externe.
+- Corrige les erreurs de compilation et les tests défaillants avant de continuer.
+- Si une décision technique importante est nécessaire, choisis la solution la plus simple et la plus sûre, explique-la et poursuis.
+- Si un accès externe manque, développe tout ce qui peut être réalisé sans cet accès et fournis une procédure précise pour terminer la configuration.
+
+## 20. CRITÈRES FINAUX D'ACCEPTATION
+
+Le produit est acceptable lorsque :
+
+- Une entreprise peut s'inscrire et commencer son essai gratuit de 72 heures.
+- Les utilisateurs autorisés peuvent gérer les employés, présences, pauses et rapports.
+- L'expiration de l'essai est réellement appliquée côté serveur.
+- Les paiements SasPay peuvent être testés et leur confirmation est vérifiée de manière fiable.
+- Un paiement confirmé active le bon abonnement une seule fois.
+- Le client peut consulter son abonnement et son historique.
+- Le super-administrateur peut consulter les clients, abonnements, paiements et revenus réels.
+- Le super-administrateur peut lire et traiter les tickets envoyés par les clients.
+- Le client reçoit les réponses dans son espace.
+- Les incidents techniques sont consultables et les réparations autorisées sont traçables.
+- Les données des différentes entreprises sont correctement isolées.
+- Les interfaces fonctionnent sur mobile et ordinateur.
+- Les tests critiques sont exécutés et documentés.
+- Les instructions de déploiement sont complètes.
+
+**Commence maintenant par analyser le projet et établir le plan d'exécution. Ensuite, développe les fonctionnalités réellement opérationnelles, teste-les et livre un produit prêt à être configuré et déployé en production.**

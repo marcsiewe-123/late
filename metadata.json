@@ -1,0 +1,6 @@
+{
+  "name": "PointAfrik SaaS",
+  "description": "Plateforme SaaS complète de gestion du personnel, présences, pauses, abonnements Mobile Money SasPay et super-administration pour entreprises en Afrique francophone.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,636 @@
+{
+  "users": [
+    {
+      "id": "user_superadmin",
+      "email": "admin@pointafrik.com",
+      "fullName": "Marc Siewe (Directeur SaaS)",
+      "phone": "+237 690 00 00 01",
+      "role": "superadmin",
+      "createdAt": "2026-08-27T07:58:20.334Z",
+      "lastLoginAt": "2026-10-26T07:58:20.333Z"
+    },
+    {
+      "id": "user_marc_translog",
+      "email": "marcsiewe326@gmail.com",
+      "fullName": "Marc Siewe",
+      "phone": "+237 671 23 45 67",
+      "role": "owner",
+      "organizationId": "org_cameroun_translog",
+      "createdAt": "2026-10-25T07:58:20.334Z",
+      "lastLoginAt": "2026-10-26T07:58:20.333Z"
+    },
+    {
+      "id": "user_kone_technova",
+      "email": "kone@technova-ci.com",
+      "fullName": "Amadou Koné",
+      "phone": "+225 07 48 92 11 00",
+      "role": "owner",
+      "organizationId": "org_ivoire_technova",
+      "createdAt": "2026-10-11T07:58:20.334Z",
+      "lastLoginAt": "2026-10-26T07:58:20.333Z"
+    },
+    {
+      "id": "user_fatou_dakar",
+      "email": "fatou@dakarbtp.sn",
+      "fullName": "Fatou Diop",
+      "phone": "+221 77 654 32 10",
+      "role": "owner",
+      "organizationId": "org_dakar_btp",
+      "createdAt": "2026-10-21T07:58:20.334Z",
+      "lastLoginAt": "2026-10-26T07:58:20.333Z"
+    }
+  ],
+  "organizations": [
+    {
+      "id": "org_cameroun_translog",
+      "name": "TransLog Cameroun SARL",
+      "legalNumber": "RC/DLA/2021/B/1842",
+      "country": "Cameroun",
+      "countryCode": "CM",
+      "currency": "XAF",
+      "phone": "+237 671 23 45 67",
+      "address": "Zone Industrielle de Bassa, Douala",
+      "timeZone": "Africa/Douala",
+      "workStartTime": "08:00",
+      "workEndTime": "17:00",
+      "lateGraceMinutes": 15,
+      "workingDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ],
+      "status": "active",
+      "createdAt": "2026-10-25T07:58:20.334Z"
+    },
+    {
+      "id": "org_ivoire_technova",
+      "name": "TechNova Abidjan SAS",
+      "legalNumber": "CI-ABJ-2022-B-9941",
+      "country": "Côte d’Ivoire",
+      "countryCode": "CI",
+      "currency": "XOF",
+      "phone": "+225 07 48 92 11 00",
+      "address": "Plateau Immeuble Trade Center, Abidjan",
+      "timeZone": "Africa/Abidjan",
+      "workStartTime": "08:30",
+      "workEndTime": "17:30",
+      "lateGraceMinutes": 15,
+      "workingDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ],
+      "status": "active",
+      "createdAt": "2026-10-11T07:58:20.334Z"
+    },
+    {
+      "id": "org_dakar_btp",
+      "name": "Dakar BTP Solutions",
+      "legalNumber": "SN-DKR-2020-B-4412",
+      "country": "Sénégal",
+      "countryCode": "SN",
+      "currency": "XOF",
+      "phone": "+221 77 654 32 10",
+      "address": "Route des Almadies, Dakar",
+      "timeZone": "Africa/Dakar",
+      "workStartTime": "08:00",
+      "workEndTime": "16:30",
+      "lateGraceMinutes": 10,
+      "workingDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat"
+      ],
+      "status": "active",
+      "createdAt": "2026-10-21T07:58:20.334Z"
+    }
+  ],
+  "plans": [
+    {
+      "id": "plan_trial",
+      "code": "trial",
+      "name": "Essai Gratuit 72h",
+      "priceXAF": 0,
+      "priceXOF": 0,
+      "durationDays": 3,
+      "maxEmployees": 5,
+      "maxAdmins": 1,
+      "features": [
+        "Gestion jusqu’à 5 employés",
+        "Pointage arrivées & départs",
+        "Gestion des pauses en direct",
+        "Calcul automatique des retards",
+        "Support par chat aide"
+      ],
+      "isActive": true,
+      "description": "3 jours complets pour découvrir la puissance de PointAfrik SaaS."
+    },
+    {
+      "id": "plan_starter",
+      "code": "starter",
+      "name": "Starter PME",
+      "priceXAF": 5000,
+      "priceXOF": 5000,
+      "durationDays": 30,
+      "maxEmployees": 15,
+      "maxAdmins": 2,
+      "features": [
+        "Jusqu’à 15 employés",
+        "Gestion complète présences & pauses",
+        "Export rapports journaliers & hebdomadaires",
+        "Notifications par e-mail & dans l’app",
+        "Mode hors-ligne synchronisé"
+      ],
+      "isActive": true,
+      "description": "Idéal pour petits ateliers, boutiques et agences en démarrage."
+    },
+    {
+      "id": "plan_business",
+      "code": "business",
+      "name": "Business Pro",
+      "priceXAF": 10000,
+      "priceXOF": 10000,
+      "durationDays": 30,
+      "maxEmployees": 50,
+      "maxAdmins": 5,
+      "features": [
+        "Jusqu’à 50 employés",
+        "Rapports mensuels & individuels détaillés",
+        "Export PDF & CSV officiels certifiés",
+        "Gestion des plannings par département",
+        "Support prioritaire par chat direct"
+      ],
+      "isActive": true,
+      "description": "Pour les entreprises en pleine expansion avec équipes multiples."
+    },
+    {
+      "id": "plan_premium",
+      "code": "premium",
+      "name": "Entreprise Illimité",
+      "priceXAF": 25000,
+      "priceXOF": 25000,
+      "durationDays": 30,
+      "maxEmployees": 500,
+      "maxAdmins": 20,
+      "features": [
+        "Employés illimités",
+        "Rapports analytiques avancés & audit",
+        "Accès API & intégration ERP",
+        "Gestionnaire de compte dédié",
+        "Sauvegardes garanties & SLA 99.9%"
+      ],
+      "isActive": true,
+      "description": "Pour moyennes et grandes entreprises exigeant performance et suivi sur-mesure."
+    }
+  ],
+  "subscriptions": [
+    {
+      "id": "sub_org1_trial",
+      "organizationId": "org_cameroun_translog",
+      "planId": "plan_business",
+      "planCode": "business",
+      "status": "active",
+      "trialStartedAt": "2026-10-25T07:58:20.334Z",
+      "trialEndsAt": "2026-10-28T07:58:20.334Z",
+      "startsAt": "2026-10-26T08:10:57.294Z",
+      "endsAt": "2026-11-25T08:10:57.294Z",
+      "autoRenew": true,
+      "maxEmployees": 50,
+      "paymentMethod": "SasPay (ORANGE_MONEY Cameroun)",
+      "lastPaymentOrderId": "order_1793002252864"
+    },
+    {
+      "id": "sub_org2_business",
+      "organizationId": "org_ivoire_technova",
+      "planId": "plan_business",
+      "planCode": "business",
+      "status": "active",
+      "startsAt": "2026-10-16T07:58:20.334Z",
+      "endsAt": "2026-11-15T07:58:20.334Z",
+      "autoRenew": true,
+      "paymentMethod": "SasPay (Wave Côte d’Ivoire)",
+      "lastPaymentOrderId": "pay_order_wave_8832",
+      "maxEmployees": 50
+    },
+    {
+      "id": "sub_org3_expired",
+      "organizationId": "org_dakar_btp",
+      "planId": "plan_trial",
+      "planCode": "trial",
+      "status": "expired",
+      "trialStartedAt": "2026-10-21T07:58:20.334Z",
+      "trialEndsAt": "2026-10-24T07:58:20.334Z",
+      "startsAt": "2026-10-21T07:58:20.334Z",
+      "endsAt": "2026-10-24T07:58:20.334Z",
+      "autoRenew": false,
+      "maxEmployees": 5
+    }
+  ],
+  "employees": [
+    {
+      "id": "emp_1",
+      "organizationId": "org_cameroun_translog",
+      "matricule": "TLC-001",
+      "firstName": "Jean-Paul",
+      "lastName": "Ewane",
+      "email": "jp.ewane@translog-cm.com",
+      "phone": "+237 670 11 22 33",
+      "department": "Logistique & Flotte",
+      "position": "Responsable Expéditions",
+      "hireDate": "2023-01-15",
+      "status": "active",
+      "scheduledStart": "08:00",
+      "scheduledEnd": "17:00",
+      "createdAt": "2026-10-25T07:58:20.334Z"
+    },
+    {
+      "id": "emp_2",
+      "organizationId": "org_cameroun_translog",
+      "matricule": "TLC-002",
+      "firstName": "Béatrice",
+      "lastName": "Mvondo",
+      "email": "b.mvondo@translog-cm.com",
+      "phone": "+237 699 44 55 66",
+      "department": "Comptabilité & Facturation",
+      "position": "Comptable Fournisseurs",
+      "hireDate": "2023-03-01",
+      "status": "active",
+      "scheduledStart": "08:00",
+      "scheduledEnd": "17:00",
+      "createdAt": "2026-10-25T07:58:20.334Z"
+    },
+    {
+      "id": "emp_3",
+      "organizationId": "org_cameroun_translog",
+      "matricule": "TLC-003",
+      "firstName": "Alain",
+      "lastName": "Ndjock",
+      "email": "a.ndjock@translog-cm.com",
+      "phone": "+237 655 77 88 99",
+      "department": "Opérations Terrain",
+      "position": "Chauffeur Poids Lourd",
+      "hireDate": "2023-06-20",
+      "status": "active",
+      "scheduledStart": "08:00",
+      "scheduledEnd": "17:00",
+      "createdAt": "2026-10-25T07:58:20.334Z"
+    },
+    {
+      "id": "emp_4",
+      "organizationId": "org_cameroun_translog",
+      "matricule": "TLC-004",
+      "firstName": "Chantal",
+      "lastName": "Kamga",
+      "email": "c.kamga@translog-cm.com",
+      "phone": "+237 674 12 34 56",
+      "department": "Ressources Humaines",
+      "position": "Gestionnaire Paie & RH",
+      "hireDate": "2023-09-01",
+      "status": "active",
+      "scheduledStart": "08:00",
+      "scheduledEnd": "17:00",
+      "createdAt": "2026-10-25T07:58:20.334Z"
+    },
+    {
+      "id": "emp_5",
+      "organizationId": "org_cameroun_translog",
+      "matricule": "TLC-005",
+      "firstName": "Samuel",
+      "lastName": "Fotso",
+      "email": "s.fotso@translog-cm.com",
+      "phone": "+237 691 98 76 54",
+      "department": "Maintenance & Dépôt",
+      "position": "Technicien Mécanique",
+      "hireDate": "2024-02-10",
+      "status": "active",
+      "scheduledStart": "08:00",
+      "scheduledEnd": "17:00",
+      "createdAt": "2026-10-25T07:58:20.334Z"
+    }
+  ],
+  "attendanceRecords": [
+    {
+      "id": "att_1",
+      "organizationId": "org_cameroun_translog",
+      "employeeId": "emp_1",
+      "employeeName": "Jean-Paul Ewane",
+      "matricule": "TLC-001",
+      "department": "Logistique & Flotte",
+      "date": "2026-10-26",
+      "checkInTime": "07:54:12",
+      "checkInTimestamp": 1793001252000,
+      "lateMinutes": 0,
+      "status": "on_time",
+      "source": "normal"
+    },
+    {
+      "id": "att_2",
+      "organizationId": "org_cameroun_translog",
+      "employeeId": "emp_2",
+      "employeeName": "Béatrice Mvondo",
+      "matricule": "TLC-002",
+      "department": "Comptabilité & Facturation",
+      "date": "2026-10-26",
+      "checkInTime": "08:04:30",
+      "checkInTimestamp": 1793001870000,
+      "lateMinutes": 0,
+      "status": "on_time",
+      "source": "normal"
+    },
+    {
+      "id": "att_3",
+      "organizationId": "org_cameroun_translog",
+      "employeeId": "emp_3",
+      "employeeName": "Alain Ndjock",
+      "matricule": "TLC-003",
+      "department": "Opérations Terrain",
+      "date": "2026-10-26",
+      "checkInTime": "08:35:10",
+      "checkInTimestamp": 1793003710000,
+      "lateMinutes": 35,
+      "status": "late",
+      "source": "normal",
+      "notes": "Embouteillages carrefour Ndokoti"
+    },
+    {
+      "id": "att_4",
+      "organizationId": "org_cameroun_translog",
+      "employeeId": "emp_4",
+      "employeeName": "Chantal Kamga",
+      "matricule": "TLC-004",
+      "department": "Ressources Humaines",
+      "date": "2026-10-26",
+      "checkInTime": "07:50:00",
+      "checkInTimestamp": 1793001000000,
+      "lateMinutes": 0,
+      "status": "on_time",
+      "source": "normal"
+    }
+  ],
+  "breakRecords": [
+    {
+      "id": "brk_1",
+      "organizationId": "org_cameroun_translog",
+      "employeeId": "emp_2",
+      "employeeName": "Béatrice Mvondo",
+      "date": "2026-10-26",
+      "startTime": "12:15:00",
+      "startTimestamp": 1793016900000,
+      "durationMinutes": 25,
+      "status": "in_progress",
+      "source": "normal",
+      "notes": "Pause déjeuner"
+    },
+    {
+      "id": "brk_2",
+      "organizationId": "org_cameroun_translog",
+      "employeeId": "emp_1",
+      "employeeName": "Jean-Paul Ewane",
+      "date": "2026-10-26",
+      "startTime": "10:15:00",
+      "endTime": "10:30:00",
+      "startTimestamp": 1793009700000,
+      "endTimestamp": 1793010600000,
+      "durationMinutes": 15,
+      "status": "completed",
+      "source": "normal",
+      "notes": "Pause café"
+    }
+  ],
+  "manualCorrections": [],
+  "paymentOrders": [
+    {
+      "id": "pay_order_wave_8832",
+      "reference": "SAS-WAVE-CI-2026-8832",
+      "organizationId": "org_ivoire_technova",
+      "organizationName": "TechNova Abidjan SAS",
+      "planId": "plan_business",
+      "planName": "Business Pro",
+      "amount": 10000,
+      "currency": "XOF",
+      "phone": "+2250748921100",
+      "operator": "wave",
+      "country": "Côte d’Ivoire",
+      "status": "confirmed",
+      "sasPayRef": "SP_TX_WAVE_998124",
+      "idempotencyKey": "idemp_wave_ci_org2_8832",
+      "instructions": "Paiement confirmé avec succès via le lien direct Wave QR.",
+      "createdAt": "2026-10-16T07:58:20.334Z",
+      "confirmedAt": "2026-10-16T07:59:05.334Z",
+      "receiptNumber": "REC-2026-XOF-0012",
+      "mode": "live"
+    },
+    {
+      "id": "pay_order_om_cm_1904",
+      "reference": "SAS-OM-CM-2026-1904",
+      "organizationId": "org_cameroun_translog",
+      "organizationName": "TransLog Cameroun SARL",
+      "planId": "plan_starter",
+      "planName": "Starter PME",
+      "amount": 5000,
+      "currency": "XAF",
+      "phone": "+237671234567",
+      "operator": "orange_money",
+      "country": "Cameroun",
+      "status": "pending",
+      "sasPayRef": "SP_TX_OM_CM_55102",
+      "idempotencyKey": "idemp_om_cm_org1_1904",
+      "instructions": "Tapez #150# sur votre téléphone Orange, puis choisissez 1 pour valider le prélèvement de 5 000 FCFA.",
+      "createdAt": "2026-10-26T06:58:20.334Z",
+      "mode": "sandbox"
+    },
+    {
+      "id": "order_1793002252864",
+      "reference": "SAS-ORA-252852",
+      "organizationId": "org_cameroun_translog",
+      "organizationName": "TransLog Cameroun SARL",
+      "planId": "plan_business",
+      "planName": "Business Pro (Mensuel)",
+      "amount": 10000,
+      "currency": "XAF",
+      "phone": "+237671234567",
+      "operator": "orange_money",
+      "country": "Cameroun",
+      "status": "confirmed",
+      "sasPayRef": "SP_TX_1793002257293",
+      "idempotencyKey": "idemp_SAS-ORA-252852_1793002252852",
+      "instructions": "Un prompt d’autorisation a été envoyé sur votre numéro Orange (+237671234567). Veuillez composer le #150# pour confirmer le débit de 10 000 XAF et entrer votre code secret Orange Money.",
+      "createdAt": "2026-10-26T08:10:52.864Z",
+      "mode": "sandbox",
+      "confirmedAt": "2026-10-26T08:10:57.294Z",
+      "receiptNumber": "REC-2026-XAF-9010"
+    }
+  ],
+  "supportTickets": [
+    {
+      "id": "ticket_1",
+      "organizationId": "org_cameroun_translog",
+      "organizationName": "TransLog Cameroun SARL",
+      "userId": "user_marc_translog",
+      "userEmail": "marcsiewe326@gmail.com",
+      "userName": "Marc Siewe",
+      "subject": "Comment configurer deux horaires distincts pour l’équipe de nuit ?",
+      "category": "hr",
+      "priority": "normal",
+      "status": "in_progress",
+      "createdAt": "2026-10-25T17:58:20.334Z",
+      "updatedAt": "2026-10-26T05:58:20.334Z",
+      "assignedAdmin": "Marc Siewe (Directeur SaaS)",
+      "lastMessageSnippet": "Bonjour Marc, vous pouvez définir des horaires personnalisés par employé...",
+      "unreadClientCount": 0,
+      "unreadAdminCount": 0
+    },
+    {
+      "id": "ticket_2",
+      "organizationId": "org_dakar_btp",
+      "organizationName": "Dakar BTP Solutions",
+      "userId": "user_fatou_dakar",
+      "userEmail": "fatou@dakarbtp.sn",
+      "userName": "Fatou Diop",
+      "subject": "Notre période d’essai a expiré, comment payer par Orange Money Sénégal ?",
+      "category": "payment",
+      "priority": "urgent",
+      "status": "open",
+      "createdAt": "2026-10-26T03:58:20.334Z",
+      "updatedAt": "2026-10-26T03:58:20.334Z",
+      "lastMessageSnippet": "Bonjour, notre essai est bloqué ce matin, merci de nous guider.",
+      "unreadClientCount": 0,
+      "unreadAdminCount": 1
+    }
+  ],
+  "supportMessages": [
+    {
+      "id": "msg_1_1",
+      "ticketId": "ticket_1",
+      "senderId": "user_marc_translog",
+      "senderName": "Marc Siewe",
+      "senderRole": "client",
+      "content": "Bonjour l’équipe PointAfrik, nous avons des chauffeurs qui débutent à 20h et terminent à 05h. Comment les gérer sans fausser le calcul des retards ?",
+      "createdAt": "2026-10-25T17:58:20.334Z"
+    },
+    {
+      "id": "msg_1_2",
+      "ticketId": "ticket_1",
+      "senderId": "user_superadmin",
+      "senderName": "Support PointAfrik",
+      "senderRole": "support_admin",
+      "content": "Bonjour Marc ! C’est une excellente question. Dans la section Employés, vous pouvez attribuer des horaires personnalisés par shift à chaque collaborateur. Le calcul du retard s’adaptera automatiquement.",
+      "createdAt": "2026-10-26T05:58:20.334Z"
+    },
+    {
+      "id": "msg_2_1",
+      "ticketId": "ticket_2",
+      "senderId": "user_fatou_dakar",
+      "senderName": "Fatou Diop",
+      "senderRole": "client",
+      "content": "Bonjour, notre période d’essai de 72h s’est terminée hier. Nous souhaitons souscrire au forfait Business Pro à 10 000 FCFA avec Orange Money Sénégal. Pouvez-vous nous confirmer la procédure ?",
+      "createdAt": "2026-10-26T03:58:20.334Z"
+    }
+  ],
+  "supportInternalNotes": [
+    {
+      "id": "note_1",
+      "ticketId": "ticket_2",
+      "authorId": "user_superadmin",
+      "authorName": "Marc Siewe (Directeur SaaS)",
+      "note": "Client à fort potentiel (BTP avec ~35 employés). Si besoin, leur accorder une extension exceptionnelle de 48h pour finaliser leur paiement.",
+      "createdAt": "2026-10-26T04:58:20.334Z"
+    }
+  ],
+  "systemIncidents": [
+    {
+      "id": "inc_1",
+      "component": "SasPay Gateway - MTN MoMo CM",
+      "description": "Webhook de confirmation retardé de 12 secondes lors de la crête réseau de midi.",
+      "severity": "warning",
+      "errorDetails": "Timeout transitoire 504 sur endpoint amqp SasPay. Traité avec succès via le retry automatique idempotent.",
+      "relatedOrganizationId": "org_cameroun_translog",
+      "relatedOrderId": "pay_order_om_cm_1904",
+      "status": "identified",
+      "canRepair": true,
+      "repairActionType": "reverify_payment",
+      "repairAuditLog": [
+        "2026-10-26T07:15:00Z - Détection automatique de latence webhook.",
+        "2026-10-26T07:15:30Z - Enregistrement de l’incident et file d’attente sécurisée."
+      ],
+      "createdAt": "2026-10-25T23:58:20.334Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "aud_1793002257295",
+      "organizationId": "org_cameroun_translog",
+      "organizationName": "TransLog Cameroun SARL",
+      "actorId": "saspay_webhook",
+      "actorName": "Passerelle SasPay Mobile Money",
+      "actorRole": "admin",
+      "action": "PAYMENT_CONFIRMED_SUBSCRIPTION_ACTIVATED",
+      "targetEntity": "Subscription",
+      "targetId": "sub_org1_trial",
+      "details": "Paiement de 10 000 XAF confirmé via orange_money. Abonnement activé jusqu'au 25/11/2026.",
+      "timestamp": "2026-10-26T08:10:57.294Z"
+    },
+    {
+      "id": "aud_1",
+      "actorId": "user_superadmin",
+      "actorName": "Marc Siewe (Directeur SaaS)",
+      "actorRole": "superadmin",
+      "action": "INITIALIZE_SYSTEM",
+      "targetEntity": "System",
+      "targetId": "root",
+      "details": "Initialisation de la plateforme PointAfrik SaaS v1.0 avec passerelle SasPay.",
+      "timestamp": "2026-09-26T07:58:20.334Z"
+    },
+    {
+      "id": "aud_2",
+      "organizationId": "org_ivoire_technova",
+      "organizationName": "TechNova Abidjan SAS",
+      "actorId": "user_kone_technova",
+      "actorName": "Amadou Koné",
+      "actorRole": "owner",
+      "action": "SUBSCRIPTION_ACTIVATED",
+      "targetEntity": "Subscription",
+      "targetId": "sub_org2_business",
+      "details": "Activation du forfait Business Pro (10 000 XOF) suite à validation SasPay Wave.",
+      "timestamp": "2026-10-16T07:58:20.334Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif_1793002257300",
+      "organizationId": "org_cameroun_translog",
+      "title": "Abonnement activé avec succès !",
+      "message": "Votre paiement Mobile Money de 10 000 XAF a été validé. Reçu N° REC-2026-XAF-9010.",
+      "type": "payment_confirmed",
+      "read": false,
+      "createdAt": "2026-10-26T08:10:57.294Z"
+    },
+    {
+      "id": "notif_1",
+      "organizationId": "org_cameroun_translog",
+      "userId": "user_marc_translog",
+      "title": "Période d’essai en cours",
+      "message": "Il vous reste 48 heures d’essai gratuit complet sur PointAfrik.",
+      "type": "trial_warning",
+      "read": false,
+      "createdAt": "2026-10-25T19:58:20.334Z"
+    },
+    {
+      "id": "notif_2",
+      "organizationId": "org_ivoire_technova",
+      "userId": "user_kone_technova",
+      "title": "Paiement confirmé",
+      "message": "Votre abonnement Business Pro a été renouvelé avec succès pour 30 jours.",
+      "type": "payment_confirmed",
+      "read": true,
+      "createdAt": "2026-10-16T07:58:20.334Z"
+    }
+  ]
+}
